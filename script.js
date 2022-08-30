@@ -397,7 +397,7 @@ console.log(
     return Math.floor(Math.random() * 6 + 1);
   })
 );*/
-
+/*
 labelBalance.addEventListener('click', () => {
   const movementsUI = Array.from(
     document.querySelectorAll('.movements__value'),
@@ -405,3 +405,72 @@ labelBalance.addEventListener('click', () => {
   );
   console.log(movementsUI);
 });
+
+*/
+//CODING CHALLENGE #4
+const dogs = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] },
+];
+//1
+dogs.forEach(element => {
+  element.recommendedFood = Math.trunc(element.weight ** 0.75 * 28);
+});
+//2
+const SarahDog = dogs.find(dog => dog.owners.includes('Sarah'));
+console.log(
+  SarahDog.recommendedFood > SarahDog.curFood ? 'Underfed' : 'Overfed'
+);
+//3
+const ownersEatTooMuch = dogs.filter(dog => dog.curFood > dog.recommendedFood);
+console.log(ownersEatTooMuch);
+
+const ownersEatTooLittle = dogs.filter(
+  dog => dog.curFood < dog.recommendedFood
+);
+console.log(ownersEatTooLittle);
+//4
+
+let arr1 = [];
+ownersEatTooMuch.forEach(element => {
+  arr1 = arr1.concat(element.owners);
+});
+let str1 = arr1.join(' and ');
+console.log(`${str1}'s dogs eat too much.`);
+
+let arr2 = [];
+ownersEatTooLittle.forEach(element => {
+  arr2 = arr2.concat(element.owners);
+});
+let str2 = arr2.join(' and ');
+console.log(`${str2}'s dogs eat too little.`);
+//5
+let state = false;
+
+dogs.forEach(dog => {
+  if (dog.curFood === dog.recommendedFood) {
+    state = true;
+  }
+});
+console.log(state);
+
+console.log(dogs.some(dog => dog.curFood === dog.recFood));
+//6
+console.log(
+  dogs.some(
+    dog => dog.curFood < dog.curFood * 1.1 || dog.curFood > dog.curFood * 0.9
+  )
+);
+//7
+const dogsEatingOkay = dogs.filter(
+  dog => dog.curFood < dog.curFood * 1.1 || dog.curFood > dog.curFood * 0.9
+);
+
+console.log(dogsEatingOkay);
+//8
+console.log('-----------------8---------------');
+const dogsCopy = dogs.slice();
+dogsCopy.sort((a, b) => a.curFood - b.curFood);
+console.log(dogsCopy);
