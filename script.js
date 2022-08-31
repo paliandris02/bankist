@@ -59,6 +59,7 @@ currenciesUnique.forEach(value => {
 // BANKIST APP
 
 // Data
+
 const account1 = {
   owner: 'Jonas Schmedtmann',
   movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
@@ -100,7 +101,9 @@ const account2 = {
 };
 
 const accounts = [account1, account2];
+
 // Elements
+
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
 const labelBalance = document.querySelector('.balance__value');
@@ -126,6 +129,25 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+let currentAccount;
+const now = new Date();
+const options = {
+  hour: 'numeric',
+  minute: 'numeric',
+  day: 'numeric',
+  weekday: 'long',
+  month: 'long',
+  year: 'numeric',
+};
+labelDate.textContent = new Intl.DateTimeFormat('hu-HU', options).format(now);
+
+//fake logged in
+currentAccount = account2;
+containerApp.style.opacity = 100;
+
+//FUNCTIONS
+
+//---------------------------------------------
 const formatMovementDate = date => {
   const calcDaysPassed = (date1, date2) => {
     return Math.round(Math.abs((date2 - date1) / 1000 / 60 / 60 / 24));
@@ -144,7 +166,7 @@ const formatMovementDate = date => {
 
   return `${day}/${month}/${year}`;
 };
-
+//---------------------------------------------
 const displayMovements = function (acc, sort = false) {
   const movs = sort
     ? acc.movements.slice().sort((a, b) => a - b)
@@ -165,7 +187,7 @@ const displayMovements = function (acc, sort = false) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-
+//---------------------------------------------
 const createUsernames = accs => {
   accs.forEach(function (acc) {
     acc.username = acc.owner
@@ -175,7 +197,7 @@ const createUsernames = accs => {
       .join('');
   });
 };
-
+//---------------------------------------------
 const calcDisplayBalance = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
@@ -196,14 +218,11 @@ const calcDisplayBalance = function (acc) {
     .reduce((acc, cur) => acc + cur, 0);
   labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 };
-
+//---------------------------------------------
 const calcAndPrintBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, cur) => acc + cur, 0);
   labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
 };
-
-createUsernames(accounts);
-//eventhandlers
 
 const updateUI = function (currentAccount) {
   displayMovements(currentAccount);
@@ -212,12 +231,12 @@ const updateUI = function (currentAccount) {
   //display summary
   calcAndPrintBalance(currentAccount);
 };
-
-let currentAccount;
-//fake logged in
-currentAccount = account2;
+//---------------------------------------------
+createUsernames(accounts);
 updateUI(currentAccount);
-containerApp.style.opacity = 100;
+//eventhandlers
+
+//LOGIN
 
 btnLogin.addEventListener('click', function (event) {
   event.preventDefault();
@@ -231,7 +250,7 @@ btnLogin.addEventListener('click', function (event) {
       currentAccount.owner.split(' ')[0]
     }`;
 
-    const now = new Date();
+    //Create current date and time
     const day = `${now.getDate()}`.padStart(2, 0);
     const month = `${now.getMonth() + 1}`.padStart(2, 0);
     const year = now.getFullYear();
@@ -248,6 +267,8 @@ btnLogin.addEventListener('click', function (event) {
     updateUI(currentAccount);
   }
 });
+
+//TRANSFER
 
 btnTransfer.addEventListener('click', function (event) {
   event.preventDefault();
@@ -271,6 +292,9 @@ btnTransfer.addEventListener('click', function (event) {
     updateUI(currentAccount);
   }
 });
+
+//LOAN
+
 btnLoan.addEventListener('click', e => {
   e.preventDefault();
   const amount = Math.floor(inputLoanAmount.value);
@@ -297,6 +321,9 @@ btnClose.addEventListener('click', e => {
     inputCloseUsername.value = inputClosePin.value = '';
   }
 });
+
+//SORTING
+
 let sorted = false;
 btnSort.addEventListener('click', e => {
   e.preventDefault();
