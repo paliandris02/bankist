@@ -536,6 +536,7 @@ console.log(typeof 20n);
 */
 
 //Create a date
+/*
 const now = new Date();
 console.log(
   now.getFullYear(),
@@ -570,3 +571,4 @@ console.log(future.getTime());
 console.log(Date.now());
 future.setFullYear(2040);
 console.log(future);
+*/
