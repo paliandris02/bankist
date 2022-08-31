@@ -75,7 +75,7 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-let currentAccount;
+let currentAccount, interval;
 const now = new Date();
 const options = {
   hour: 'numeric',
@@ -85,11 +85,31 @@ const options = {
   year: 'numeric',
 };
 
-//fake logged in
-currentAccount = account2;
-containerApp.style.opacity = 100;
+const optionTimer = {
+  logOutTime: 300,
+};
 
 //FUNCTIONS
+
+//---------------------------------------------
+const startLogOutTimer = function () {
+  const tick = function () {
+    const min = `${Math.floor(time / 60)}`.padStart(2, 0);
+    const sec = `${time % 60}`.padStart(2, 0);
+    labelTimer.textContent = `${min}:${sec}`;
+    if (time === 0) {
+      containerApp.style.opacity = 0;
+      currentAccount = '';
+      labelWelcome.textContent = 'Log in to get started';
+      clearInterval(interval);
+    }
+    time--;
+  };
+  let time = optionTimer.logOutTime;
+  tick();
+  const interval = setInterval(tick, 1000);
+  return interval;
+};
 //---------------------------------------------
 const formatCur = function (value, locale, currency) {
   const formattedMov = new Intl.NumberFormat(locale, {
@@ -184,7 +204,7 @@ const updateUI = function (currentAccount) {
 };
 //---------------------------------------------
 createUsernames(accounts);
-updateUI(currentAccount);
+//updateUI(currentAccount);
 //eventhandlers
 
 //LOGIN
@@ -212,6 +232,8 @@ btnLogin.addEventListener('click', function (event) {
     inputLoginPin.blur();
     containerApp.style.opacity = 100;
 
+    if (interval) clearInterval(interval);
+    interval = startLogOutTimer();
     //display movements
     updateUI(currentAccount);
   }
@@ -240,6 +262,8 @@ btnTransfer.addEventListener('click', function (event) {
 
     updateUI(currentAccount);
   }
+  clearInterval(interval);
+  interval = startLogOutTimer();
 });
 
 //LOAN
@@ -257,6 +281,8 @@ btnLoan.addEventListener('click', e => {
       currentAccount.movementsDates.push(new Date().toISOString());
       document.querySelector('.labelLoan').textContent = 'Request loan';
       updateUI(currentAccount);
+      clearInterval(interval);
+      interval = startLogOutTimer();
     }
   }, 2500);
 });
