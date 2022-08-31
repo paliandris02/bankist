@@ -124,7 +124,7 @@ const displayMovements = function (movements, sort = false) {
     const html = `
     <div class="movements__row">
     <div class="movements__type movements__type--${type}">${i} ${type}</div>
-    <div class="movements__value">${mov}€</div>
+    <div class="movements__value">${mov.toFixed(2)}€</div>
     </div>
     `;
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -145,12 +145,12 @@ const calcDisplayBalance = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, cur) => acc + cur, 0);
-  labelSumIn.textContent = `${incomes}€`;
+  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
 
   const expenses = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, cur) => acc + cur, 0);
-  labelSumOut.textContent = `${Math.abs(expenses)}€`;
+  labelSumOut.textContent = `${Math.abs(expenses).toFixed(2)}€`;
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -159,12 +159,12 @@ const calcDisplayBalance = function (acc) {
       return int >= 1;
     })
     .reduce((acc, cur) => acc + cur, 0);
-  labelSumInterest.textContent = `${interest}€`;
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 };
 
 const calcAndPrintBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, cur) => acc + cur, 0);
-  labelBalance.textContent = `${acc.balance}€`;
+  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
 };
 
 createUsernames(accounts);
@@ -221,7 +221,7 @@ btnTransfer.addEventListener('click', function (event) {
 });
 btnLoan.addEventListener('click', e => {
   e.preventDefault();
-  const amount = Number(inputLoanAmount.value);
+  const amount = Math.floor(inputLoanAmount.value);
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     currentAccount.movements.push(amount);
     updateUI(currentAccount);
@@ -408,6 +408,7 @@ labelBalance.addEventListener('click', () => {
 
 */
 //CODING CHALLENGE #4
+/*
 const dogs = [
   { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
   { weight: 8, curFood: 200, owners: ['Matilda'] },
@@ -474,3 +475,98 @@ console.log('-----------------8---------------');
 const dogsCopy = dogs.slice();
 dogsCopy.sort((a, b) => a.curFood - b.curFood);
 console.log(dogsCopy);
+*/
+/*
+console.log(Math.sqrt(2));
+console.log(8 ** (1 / 3));
+console.log(Math.max(5, 234, 1, 4, 12, 3));
+console.log(Math.min(5, 234, 1, 4, 12, 3));
+
+console.log(Math.PI * Number.parseFloat('10px') ** 2);
+
+const randomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min) + 1) + min;
+
+console.log(randomInt(1, 8));
+console.log(Math.round(2.4));
+console.log(Math.round(2.6));
+
+console.log(Math.trunc(-23.2));
+console.log(Math.floor(-23.2));
+
+console.log((2.7).toFixed(4));
+console.log(+(2.2552).toFixed(2));
+
+labelBalance.addEventListener('click', function () {
+  [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
+    if (i % 2 === 0) {
+      row.style.backgroundColor = 'orangered';
+    }
+    if (i % 3 === 0) {
+      row.style.backgroundColor = 'blue';
+    }
+  });
+});
+*/
+//
+/*
+const diameter = 287_460_000_000;
+console.log(diameter);
+*/
+/*
+console.log(2 ** 53 - 1);
+console.log(Number.MAX_SAFE_INTEGER);
+console.log(192784761728647812766711782478127n);
+console.log(BigInt(471277));
+
+console.log(10000n + 10000n);
+console.log(
+  249289184798127487198758917578971627864781n +
+    213681562856215654652761547512645712n
+);
+
+const regular = 24;
+const huge = 7249718274978129784976127964791267967194n;
+console.log(BigInt(regular) + huge);
+
+console.log(20n > 15);
+console.log(20n === 20);
+console.log(20n == 20);
+console.log(typeof 20n);
+*/
+
+//Create a date
+const now = new Date();
+console.log(
+  now.getFullYear(),
+  now.getDate(),
+  now.getMonth() + 1,
+  now.getDay(),
+  now.getHours(),
+  now.getMinutes(),
+  now.getSeconds()
+);
+console.log(new Date('Aug 02 2020 18:05:41'));
+console.log(new Date('December 23, 2015'));
+console.log(new Date(2102, 10, 19, 15, 23, 5));
+
+console.log(new Date(0));
+console.log(new Date(3 * 24 * 60 * 60 * 1000));
+
+const future = new Date(2037, 10, 19, 15, 23);
+console.log(future);
+console.log(future.getFullYear());
+console.log(future.getMonth() + 1);
+console.log(future.getDate());
+console.log(future.getHours());
+console.log(future.getMinutes());
+console.log(future.getSeconds());
+console.log(future.getMilliseconds());
+
+console.log(future.toISOString());
+//timestamp -- milliseconds passed since 1970 jan 1
+console.log(future.getTime());
+
+console.log(Date.now());
+future.setFullYear(2040);
+console.log(future);
