@@ -96,8 +96,8 @@ const account2 = {
     '2022-08-28T18:49:59.371Z',
     '2022-08-26T12:01:20.894Z',
   ],
-  currency: 'USD',
-  locale: 'en-US',
+  currency: 'HUF',
+  locale: 'hu-HU',
 };
 
 const accounts = [account1, account2];
@@ -135,20 +135,25 @@ const options = {
   hour: 'numeric',
   minute: 'numeric',
   day: 'numeric',
-  weekday: 'long',
   month: 'long',
   year: 'numeric',
 };
-labelDate.textContent = new Intl.DateTimeFormat('hu-HU', options).format(now);
 
 //fake logged in
 currentAccount = account2;
 containerApp.style.opacity = 100;
 
 //FUNCTIONS
-
 //---------------------------------------------
-const formatMovementDate = date => {
+const formatCur = function (value, locale, currency) {
+  const formattedMov = new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency,
+  }).format(value);
+  return formattedMov;
+};
+//---------------------------------------------
+const formatMovementDate = (date, locale) => {
   const calcDaysPassed = (date1, date2) => {
     return Math.round(Math.abs((date2 - date1) / 1000 / 60 / 60 / 24));
   };
@@ -160,11 +165,7 @@ const formatMovementDate = date => {
   if (daysPassed === 1) return 'Yesterday';
   if (daysPassed <= 7) return `${daysPassed} days ago`;
 
-  const day = `${date.getDate()}`.padStart(2, 0);
-  const month = `${date.getMonth() + 1}`.padStart(2, 0);
-  const year = date.getFullYear();
-
-  return `${day}/${month}/${year}`;
+  return new Intl.DateTimeFormat(locale).format(date);
 };
 //---------------------------------------------
 const displayMovements = function (acc, sort = false) {
@@ -176,12 +177,15 @@ const displayMovements = function (acc, sort = false) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const date = new Date(acc.movementsDates[i]);
-    const displayDate = formatMovementDate(date);
+    const displayDate = formatMovementDate(date, acc.locale);
+
+    const formattedMov = formatCur(mov, acc.locale, acc.currency);
+
     const html = `
     <div class="movements__row">
     <div class="movements__type movements__type--${type}">${i} ${type}</div>
     <div class="movements__date">${displayDate}</div>
-    <div class="movements__value">${mov.toFixed(2)}€</div>
+    <div class="movements__value">${formattedMov}</div>
     </div>
     `;
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -202,12 +206,12 @@ const calcDisplayBalance = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, cur) => acc + cur, 0);
-  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
+  labelSumIn.textContent = formatCur(incomes, acc.locale, acc.currency);
 
   const expenses = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, cur) => acc + cur, 0);
-  labelSumOut.textContent = `${Math.abs(expenses).toFixed(2)}€`;
+  labelSumOut.textContent = formatCur(expenses, acc.locale, acc.currency);
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -216,12 +220,13 @@ const calcDisplayBalance = function (acc) {
       return int >= 1;
     })
     .reduce((acc, cur) => acc + cur, 0);
-  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+  labelSumInterest.textContent = formatCur(interest, acc.locale, acc.currency);
 };
 //---------------------------------------------
 const calcAndPrintBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, cur) => acc + cur, 0);
-  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
+  const formattedMov = formatCur(acc.balance, acc.locale, acc.currency);
+  labelBalance.textContent = `${formattedMov}`;
 };
 
 const updateUI = function (currentAccount) {
@@ -251,18 +256,16 @@ btnLogin.addEventListener('click', function (event) {
     }`;
 
     //Create current date and time
-    const day = `${now.getDate()}`.padStart(2, 0);
-    const month = `${now.getMonth() + 1}`.padStart(2, 0);
-    const year = now.getFullYear();
-    const hours = `${now.getHours()}`.padStart(2, 0);
-    const minutes = `${now.getMinutes()}`.padStart(2, 0);
+    labelDate.textContent = new Intl.DateTimeFormat(
+      currentAccount.locale,
+      options
+    ).format(now);
 
-    labelDate.textContent = `${day}/${month}/${year}, ${hours}:${minutes}`;
     //clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
-
     containerApp.style.opacity = 100;
+
     //display movements
     updateUI(currentAccount);
   }
@@ -658,3 +661,10 @@ const days1 = calcDaysPassed(new Date(2037, 3, 14), new Date(2037, 8, 23));
 
 console.log(days1 / 1000 / 60 / 60 / 24);
 */
+const options2 = {
+  style: 'currency',
+  currency: 'HUF',
+  //useGrouping: false,
+};
+const num = 3884764.23;
+console.log(new Intl.NumberFormat(navigator.language, options2).format(num));
