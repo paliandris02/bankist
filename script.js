@@ -2,60 +2,6 @@
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
-// LECTURES
-
-/////////////////////////////////////////////////
-/*
-let arr = ['a', 'b', 'c', 'd', 'e'];
-console.log(arr.slice(2, 3));
-const arr2 = arr.slice(2);
-console.log(arr2);
-console.log(arr.splice(2));
-
-arr = ['a', 'b', 'c', 'd', 'e'];
-console.log(arr.reverse());
-
-const letters = arr.concat(arr2);
-console.log(letters);
-console.log(letters.join(' - '));
-*/
-
-//FOREACH
-/*
-for (const movement of movements) {
-  if (movement > 0) {
-    console.log(`Deposit : ${movement}`);
-  } else {
-    console.log(`Withdrew : ${Math.abs(movement)}`);
-  }
-}
-*/
-/*
-element > 0
-? console.log(`${index + 1}: Deposit : ${element}`)
-: console.log(`${index + 1}: Withdrew : ${Math.abs(element)}`);
-});
-
-//
-
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
-
-currencies.forEach((value, key, map) => {
-  console.log(`${key}: ${value}`);
-});
-
-const currenciesUnique = new Set(['USD', 'GBP', 'USD', 'EUR', 'EUR']);
-currenciesUnique.forEach(value => {
-  console.log(`${value}`);
-});
-*/
-
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
 // BANKIST APP
 
 // Data
