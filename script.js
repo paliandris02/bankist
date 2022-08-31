@@ -301,12 +301,21 @@ btnTransfer.addEventListener('click', function (event) {
 btnLoan.addEventListener('click', e => {
   e.preventDefault();
   const amount = Math.floor(inputLoanAmount.value);
-  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    currentAccount.movements.push(amount);
-    currentAccount.movementsDates.push(new Date().toISOString());
-    updateUI(currentAccount);
-  }
+  document.querySelector('.labelLoan').textContent = 'Proccesing...';
+  setTimeout(() => {
+    if (
+      amount > 0 &&
+      currentAccount.movements.some(mov => mov >= amount * 0.1)
+    ) {
+      currentAccount.movements.push(amount);
+      currentAccount.movementsDates.push(new Date().toISOString());
+      document.querySelector('.labelLoan').textContent = 'Request loan';
+      updateUI(currentAccount);
+    }
+  }, 2500);
 });
+
+//CLOSE
 
 btnClose.addEventListener('click', e => {
   e.preventDefault();
@@ -661,6 +670,7 @@ const days1 = calcDaysPassed(new Date(2037, 3, 14), new Date(2037, 8, 23));
 
 console.log(days1 / 1000 / 60 / 60 / 24);
 */
+/*
 const options2 = {
   style: 'currency',
   currency: 'HUF',
@@ -668,3 +678,18 @@ const options2 = {
 };
 const num = 3884764.23;
 console.log(new Intl.NumberFormat(navigator.language, options2).format(num));
+*/
+/*
+const ing = ['olives', 'spinach'];
+
+const pizzaTImer = setTimeout(
+  (ing1, ing2) => {
+    console.log(`'Here is your spaghetti code.' ${ing1} ${ing2}`);
+  },
+  3000,
+  ...ing
+);
+if (ing.includes('spinach')) {
+  clearTimeout(pizzaTImer);
+}
+*/
